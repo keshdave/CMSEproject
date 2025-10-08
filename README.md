@@ -1,4 +1,4 @@
-# 🎈 Blank app template
+# CMSE 830 Midterm Project
 
 A simple Streamlit app template for you to modify!
 
