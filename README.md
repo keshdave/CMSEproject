@@ -1,4 +1,4 @@
-# NHL Defencemen: Interactive Data Analysis
+# NHL Defencemen: Interactive Web App and Data Analysis
 
 To access the app, [Click Here](https://appapppy-gq82ywhwiz5bocbfmhzrwf.streamlit.app/)!
 
