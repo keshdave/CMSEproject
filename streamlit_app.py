@@ -67,7 +67,6 @@ page = st.sidebar.radio(
         "Missing Values",
         "Correlation Analysis",
         "Scatter Plots",
-        "Distribution Plots",
         "**Wrapping Up**"
     ]
 )
@@ -289,16 +288,6 @@ elif page == "Correlation Analysis":
         """)
 
 
-# --- Distribution Plots ---
-elif page == "Distribution Plots":
-    st.header("Distribution of Numeric Features")
-    numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
-    selected_col = st.selectbox("Select Numeric Column:", numeric_cols)
-
-    fig = px.histogram(df, x=selected_col, nbins=30, marginal="box",
-                       title=f"Distribution of {selected_col}", opacity=0.7)
-    st.plotly_chart(fig, use_container_width=True)
-
 # --- Scatter Plots ---
 elif page == "Scatter Plots":
     st.header("Scatter Plots")
@@ -314,27 +303,27 @@ elif page == "Scatter Plots":
         with col2:
             y_axis = st.selectbox("Select Y-axis:", numeric_cols, index=min(1, len(numeric_cols)-1), key="scatter_y")
 
-    allowed_color_cols = [col for col in ['S/C', 'Ctry', 'Div', 'Conf', 'Team'] if col in df.columns]
-    color_by = st.selectbox("Color by (optional):", [None] + allowed_color_cols, key="scatter_color")
-    hover_cols = [col for col in ['Player', 'Team', 'GP', 'P', 'Ctry', 'Div', 'Conf'] if col in df.columns]
-    fig = px.scatter(
-        df, x=x_axis, y=y_axis, color=color_by,
-        title=f"{y_axis} vs {x_axis}", hover_data=hover_cols
-    )
-    st.plotly_chart(fig, use_container_width=True)
-    with st.expander("**What to do here?**", expanded=False):
-        st.markdown("""
-        This scatter plot allows us to visually explore relationships between different numeric features in the dataset. By selecting different x and y axes, we can see trends, clusters, or outliers that may not be obvious in summary statistics alone. 
-                    
-        In addition- coloring by categorical variables helps to see how different groups behave in relation to the selected features.
-        """)
-    with st.expander("**What is Class Imbalance doing here?** (_Color by_ tab)", expanded=False):
-        st.markdown("""
-        Earlier we discussed how class imbalance can impact our analysis. In this scatter plot, if we color by a categorical variable that is imbalanced (`Ctry`, `S/C`, `Div`, `Conf`), we see that certain groups dominate the higher points of the plots.
+        allowed_color_cols = [col for col in ['S/C', 'Ctry', 'Div', 'Conf', 'Team'] if col in df.columns]
+        color_by = st.selectbox("Color by (optional):", [None] + allowed_color_cols, key="scatter_color")
+        hover_cols = [col for col in ['Player', 'Team', 'GP', 'P', 'Ctry', 'Div', 'Conf'] if col in df.columns]
+        fig = px.scatter(
+            df, x=x_axis, y=y_axis, color=color_by,
+            title=f"{y_axis} vs {x_axis}", hover_data=hover_cols
+        )
+        st.plotly_chart(fig, use_container_width=True)
+        with st.expander("**What to do here?**", expanded=False):
+            st.markdown("""
+            This scatter plot allows us to visually explore relationships between different numeric features in the dataset. By selecting different x and y axes, we can see trends, clusters, or outliers that may not be obvious in summary statistics alone. 
+                        
+            In addition- coloring by categorical variables helps to see how different groups behave in relation to the selected features.
+            """)
+        with st.expander("**What is Class Imbalance doing here?** (_Color by_ tab)", expanded=False):
+            st.markdown("""
+            Earlier we discussed how class imbalance can impact our analysis. In this scatter plot, if we color by a categorical variable that is imbalanced (`Ctry`, `S/C`, `Div`, `Conf`), we see that certain groups dominate the higher points of the plots.
 
-        We wondered if top producing defencemen would all come from a certain class, but as we work through different features against eachother and color them by class- we come to see that at the top of the charts there's always a good bland of defencemen from different Divisions, Confrences, and Shooting Habits
-        - However, in terms of `Ctry`, we do see that the top producing players exclusively only hail from the US, Canada, and Sweden. We were incorrect about assuming there would be more Russians at the top of the chart!
-        """)
+            We wondered if top producing defencemen would all come from a certain class, but as we work through different features against eachother and color them by class- we come to see that at the top of the charts there's always a good bland of defencemen from different Divisions, Confrences, and Shooting Habits
+            - However, in terms of `Ctry`, we do see that the top producing players exclusively only hail from the US, Canada, and Sweden. We were incorrect about assuming there would be more Russians at the top of the chart!
+            """)
 
     with tab2:
         st.info("Below are all the possible combinations of features against each other. This tab is here to give a an overall view of how all the numeric features in the dataset relate to each other.")
@@ -373,3 +362,5 @@ elif page == "**Wrapping Up**":
     - My data is now ready for regression and prediction modeling for the final project!
     """)
     st.info("Thank you for exploring my data! I hope for this to be a valuable part of my work towards Defencemen point predictions.")
+
+
