@@ -1,4 +1,4 @@
-# CMSE 830 Midterm Project
+# NHL Defencemen: Interactive Data Analysis
 
 To access the app, [Click Here](https://appapppy-gq82ywhwiz5bocbfmhzrwf.streamlit.app/)!
 
