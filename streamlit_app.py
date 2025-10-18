@@ -227,21 +227,78 @@ elif page == "Class Imbalance":
 # --- Missing Values ---
 elif page == "Missing Values":
     st.header("Missing Values Analysis")
-    # Show heatmap first
-    import matplotlib.pyplot as plt
-    plt.figure(figsize=(min(12, len(df.columns)*0.6), 6))
-    sns.heatmap(df.isnull(), cbar=False, cmap="Blues", yticklabels=False)
-    plt.xlabel("Features")
-    plt.title("Missing Values Heatmap")
-    st.pyplot(plt.gcf())
 
-    with st.expander("**There is a reason as to why we're missing values...**", expanded=False):
-        st.markdown("""
-        - Faceoffs are generally not taken by defensemen, rather forwards
-            - They will only take the faceoff if the referee has waived off all the forwards on the ice
-        - It is not mandatory to be drafted by the NHL to play in the league
-            - There will always be a handful of players who come into the league straight out of College or from a different hockey league
-        """)
+    tab1, tab2 = st.tabs(["Missing Values Overview", "Imputation"])
+
+    # --- TAB 1: Existing Missing Values Visualization ---
+    with tab1:
+        import matplotlib.pyplot as plt
+        plt.figure(figsize=(min(12, len(df.columns)*0.6), 6))
+        sns.heatmap(df.isnull(), cbar=False, cmap="Blues", yticklabels=False)
+        plt.xlabel("Features")
+        plt.title("Missing Values Heatmap")
+        st.pyplot(plt.gcf())
+
+        with st.expander("**There is a reason as to why we're missing values...**", expanded=False):
+            st.markdown("""
+            - Faceoffs are generally not taken by defensemen, rather forwards  
+               - They will only take the faceoff if the referee has waived off all the forwards on the ice.
+            - It is not mandatory to be drafted by the NHL to play in the league.  
+               - There will always be a handful of players who come into the league straight out of College or from a different hockey league.
+            """)
+
+    # --- TAB 2: Imputation ---
+    with tab2:
+        st.subheader("Imputation of Missing Values - Filled with Column Averages")
+        df_imputed = df.copy()
+
+        # Columns to impute
+        cols_to_impute = ['Draft Yr', 'Round', 'Overall']
+        for col in cols_to_impute:
+            if col in df_imputed.columns:
+                mean_val = df_imputed[col].mean()
+                df_imputed[col] = df_imputed[col].fillna(mean_val)
+
+        # --- Show correlation heatmaps before and after imputation ---
+        numeric_df = df.select_dtypes(include=[np.number])
+        corr_orig = numeric_df.corr()
+        mask = np.triu(np.ones_like(corr_orig, dtype=bool))
+
+        fig, ax = plt.subplots(figsize=(12, 8))
+        sns.heatmap(
+            corr_orig, mask=mask, cmap='RdBu_r', center=0,
+            annot=False, linewidths=.5, cbar_kws={"shrink": .8}, ax=ax
+        )
+        ax.set_title("Original Combined Data - Correlation (Lower Triangle)")
+        st.pyplot(fig)
+
+        numeric_df_imp = df_imputed.select_dtypes(include=[np.number])
+        corr_imp = numeric_df_imp.corr()
+        mask_imp = np.triu(np.ones_like(corr_imp, dtype=bool))
+
+        fig2, ax2 = plt.subplots(figsize=(12, 8))
+        sns.heatmap(
+            corr_imp, mask=mask_imp, cmap='RdBu_r', center=0,
+            annot=False, linewidths=.5, cbar_kws={"shrink": .8}, ax=ax2
+        )
+        ax2.set_title("Imputed Combined Data - Correlation (Lower Triangle)")
+        st.pyplot(fig2)
+
+        with st.expander("**What changed after imputation?**", expanded=False):
+            st.markdown("""
+            The reason it doesn’t look like much has changed after imputation is because, quite frankly, not much has. Sports data, especially draft and performance data, is complex and often doen't bode well with general statistical fixes. If we could accurately “fill in the blanks” for missing sports data, the entire sports gambling industry would be in shambles.
+
+            When we filled the missing values in `Draft Yr`, `Round`, and `Overall` with their column averages, we basically smoothed out any extremes. However, in reality, there’s a wide distribution of players drafted across all rounds (1–7), and averaging these numbers flattens that diversity.  
+            
+            So overall, this means the imputed values aren't adding any new information, it's just “evening the playing field” for analysis purposes, helping us keep the data complete for modeling without introducing strong bias.
+            """)
+        with st.expander("**Another Imputation Technique: Ignoring the missing values**", expanded=False):
+            st.markdown("""
+            In terms of my overall semester project, having missing values for `Draft Yr`, `Round`, `Overall`, and `FOW%` isn’t a major concern. These features don’t strongly correlate with predicting the number of points a defenseman earns in a season, especially when compared to numerical variables like Assists and Even Strength Points that have a much more direct impact on performance.
+
+            For the purposes of my analysis, I’ll be using a much simpler imputation strategy: _ignoring these columns altogether_. Since they contribute little value to the overall narrative of my project, removing them allows me to focus on the features that truly drive on-ice production and point prediction.
+            """)
+
 
 
 # --- Correlation Analysis ---
@@ -362,5 +419,3 @@ elif page == "**Wrapping Up**":
     - My data is now ready for regression and prediction modeling for the final project!
     """)
     st.info("Thank you for exploring my data! I hope for this to be a valuable part of my work towards Defencemen point predictions.")
-
-
