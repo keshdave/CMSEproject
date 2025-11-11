@@ -190,7 +190,7 @@ if page == "Dataset Overview":
         - Additional features such as `Div` (Division player is in based off of `Team`: Metro, Pacific, Atlantic, Central) and `Conf` (Conference player is in based off of `Div`: Eastern or Western), have been added for additional categorization
         - For housekeeping, players recorded with more than 2 teams were cleaned to only show the team they ended their season with
     - `S/C` has been encoded to numeric values for easier analysis (L -> 0, R -> 1)
-    - `Div_En` and `Conf_En` have been added as encoded versions of `Div` and `Conf` for modeling (Div: ATL=1, MET=2, CEN=3, PAC=4; Conf: EC=0, WC=1)
+    - `Div_En` and `Conf_En` have been added as encoded versions of `Div` and `Conf` for modeling (Div: MET=1, ATL=2, CEN=3, PAC=4; Conf: EC=0, WC=1)
         """)
 
     st.subheader("Data Types and Summary Stats")
