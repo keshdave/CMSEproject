@@ -164,9 +164,21 @@ if page == "Dataset Overview":
 
     st.subheader("Combined Dataset")
     # Display a view where S/C is encoded: L -> 0, R -> 1
+    # and add encoded versions of Div and Conf as Div_En and Conf_En
     view_df = df.copy()
     if 'S/C' in view_df.columns:
         view_df['S/C'] = view_df['S/C'].map({'L': 0, 'R': 1}).fillna(view_df['S/C'])
+
+    # Encode divisions to numbers 1-4 (ATL, MET, CEN, PAC) without removing original
+    div_map = {'MET': 1, 'ATL': 2, 'CEN': 3, 'PAC': 4}
+    if 'Div' in view_df.columns:
+        view_df['Div_En'] = view_df['Div'].map(div_map)
+
+    # Encode conferences: EC -> 0, WC -> 1
+    conf_map = {'EC': 0, 'WC': 1}
+    if 'Conf' in view_df.columns:
+        view_df['Conf_En'] = view_df['Conf'].map(conf_map)
+
     st.dataframe(view_df, use_container_width=True, height=320)
 
     # Dropdown for combined data info
@@ -177,7 +189,8 @@ if page == "Dataset Overview":
         - **Taken from Season Stats:** All features except for `Season`, `Pos`, and `S%`
         - Additional features such as `Div` (Division player is in based off of `Team`: Metro, Pacific, Atlantic, Central) and `Conf` (Conference player is in based off of `Div`: Eastern or Western), have been added for additional categorization
         - For housekeeping, players recorded with more than 2 teams were cleaned to only show the team they ended their season with
-        - `S/C` has been encoded to numeric values for easier analysis (L -> 0, R -> 1)
+    - `S/C` has been encoded to numeric values for easier analysis (L -> 0, R -> 1)
+    - `Div_En` and `Conf_En` have been added as encoded versions of `Div` and `Conf` for modeling (Div: ATL=1, MET=2, CEN=3, PAC=4; Conf: EC=0, WC=1)
         """)
 
     st.subheader("Data Types and Summary Stats")
