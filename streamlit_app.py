@@ -163,7 +163,11 @@ if page == "Dataset Overview":
         """)
 
     st.subheader("Combined Dataset")
-    st.dataframe(df, use_container_width=True, height=320)
+    # Display a view where S/C is encoded: L -> 0, R -> 1
+    view_df = df.copy()
+    if 'S/C' in view_df.columns:
+        view_df['S/C'] = view_df['S/C'].map({'L': 0, 'R': 1}).fillna(view_df['S/C'])
+    st.dataframe(view_df, use_container_width=True, height=320)
 
     # Dropdown for combined data info
     with st.expander("**How is this more useful, and what's changed?**", expanded=False):
@@ -173,6 +177,7 @@ if page == "Dataset Overview":
         - **Taken from Season Stats:** All features except for `Season`, `Pos`, and `S%`
         - Additional features such as `Div` (Division player is in based off of `Team`: Metro, Pacific, Atlantic, Central) and `Conf` (Conference player is in based off of `Div`: Eastern or Western), have been added for additional categorization
         - For housekeeping, players recorded with more than 2 teams were cleaned to only show the team they ended their season with
+        - `S/C` has been encoded to numeric values for easier analysis (L -> 0, R -> 1)
         """)
 
     st.subheader("Data Types and Summary Stats")
@@ -419,3 +424,5 @@ elif page == "**Wrapping Up**":
     - My data is now ready for regression and prediction modeling for the final project!
     """)
     st.info("Thank you for exploring my data! I hope for this to be a valuable part of my work towards Defencemen point predictions.")
+
+
