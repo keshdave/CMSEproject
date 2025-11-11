@@ -162,6 +162,19 @@ if page == "Dataset Overview":
             - `FOW%` - Face Off Win Percentage
         """)
 
+    # Small legend table showing the encodings applied to the Combined Dataset view
+    enc_info = {
+        'Feature': ['S/C', 'Div', 'Conf'],
+        'Encoding': [
+            'L → 0, R → 1',
+            'MET → 1, ATL → 2, CEN → 3, PAC → 4',
+            'EC → 0, WC → 1'
+        ]
+    }
+    enc_df = pd.DataFrame(enc_info)
+    st.markdown("**Encoding Legend**")
+    st.table(enc_df)
+
     st.subheader("Combined Dataset")
     # Display a view where S/C is encoded: L -> 0, R -> 1
     # and add encoded versions of Div and Conf as Div_En and Conf_En
@@ -189,8 +202,7 @@ if page == "Dataset Overview":
         - **Taken from Season Stats:** All features except for `Season`, `Pos`, and `S%`
         - Additional features such as `Div` (Division player is in based off of `Team`: Metro, Pacific, Atlantic, Central) and `Conf` (Conference player is in based off of `Div`: Eastern or Western), have been added for additional categorization
         - For housekeeping, players recorded with more than 2 teams were cleaned to only show the team they ended their season with
-    - `S/C` has been encoded to numeric values for easier analysis (L -> 0, R -> 1)
-    - `Div_En` and `Conf_En` have been added as encoded versions of `Div` and `Conf` for modeling (Div: MET=1, ATL=2, CEN=3, PAC=4; Conf: EC=0, WC=1)
+    - `S/C`, `Div`, and `Conf` have all been been encoded to numeric values for easier analysis
         """)
 
     st.subheader("Data Types and Summary Stats")
