@@ -1,6 +1,6 @@
 # NHL Defencemen: Interactive Web App and Data Analysis
 
-To access the app, [Click Here](https://appapppy-gq82ywhwiz5bocbfmhzrwf.streamlit.app/)!
+### To access the app, [Click Here](https://appapppy-gq82ywhwiz5bocbfmhzrwf.streamlit.app/)!
 
 ## Project Overview
 This project is an Interactive Data Analysis (IDA) and Exploratory Data Analysis (EDA) of NHL defensemen from the 2024–25 season. The data was collected from nhl.com/stats and merged into a single dataset combining player Bio Statistics and Season Performance. 
